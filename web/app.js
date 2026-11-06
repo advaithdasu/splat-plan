@@ -1,5 +1,5 @@
 // SplatPlan web viewer: a splat (Spark), the drone's recovered flight path,
-// and an optional layer of certified planned paths (three.js).
+// and a layer of certified planned paths (three.js).
 // Data comes from `splatplan export` into data/<scene>/:
 //   scene.splat  aligned splat (meters, +Z up)
 //   scene.json   metadata (cameras, drone size, provenance)
@@ -402,7 +402,7 @@ function runs(rec) {
 
 function buildFlight(rec) {
   const group = new THREE.Group();
-  const trail = new THREE.Group(); // the drawn path (hidden in drone view)
+  const trail = new THREE.Group(); // the drawn path
   group.add(trail);
   const T = Math.max(rec.duration_s, 1e-6);
   const rs = runs(rec);
@@ -465,8 +465,7 @@ let sliderDrag = false;
 
 function syncTrail() {
   const rec = current?.rec;
-  if (rec) rec.view.group.visible = ui.showFlight.checked || riding;
-  if (rec) rec.view.trail.visible = !riding;
+  if (rec) rec.view.group.visible = ui.showFlight.checked;
 }
 
 function placeFrustum(rec, pose) {

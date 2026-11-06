@@ -2,7 +2,7 @@
 
 I flew a drone through two rooms, turned each video into a 3D Gaussian splat, and recovered the path the drone actually flew by placing the video frames back in the splat. The web viewer plays the video and the path together, and can show the splat from where the drone was at any moment.
 
-**[Live demo](https://splatplan-demo.vercel.app)**: both rooms, with the video and flight path playing together.
+**[Deployed demo](https://dasu.dev/splat-plan)**
 
 ## The footage
 
@@ -23,36 +23,6 @@ Everything runs on one Mac. COLMAP runs on the CPU, and Brush trains on the Appl
 | Basement workspace | 1,527 of 1,684 | 49 m in 2:48 | six, 16 s total |
 
 Distances count only the recovered path, so the real flights were a bit longer: nothing is added for the gaps.
-
-## Try it without footage
-
-The footage isn't in this repo, but the planning half runs on a synthetic scene with known geometry (macOS or Linux, [Rust](https://rustup.rs) required):
-
-```bash
-cargo test --workspace
-cargo run --release -p splatplan-cli -- synth car-pocket --out out/car --write-scale
-cargo run --release -p splatplan-cli -- pipeline out/car --out out/car-report
-```
-
-That writes a map slice, a trajectory and a safety certificate to `out/car-report/`.
-
-## Your own footage
-
-This needs an Apple Silicon Mac and Rust.
-
-```bash
-scripts/setup_macos.sh                         # ffmpeg, COLMAP, Brush
-scripts/ingest.sh data/captures/<name>         # video -> splat
-# give it a scale: scale.json or annotations.json, see data/README.md
-splatplan clean  data/captures/<name>          # remove floaters
-scripts/register_all.sh data/captures/<name>   # place every video frame (~10-15 min)
-splatplan flight data/captures/<name>          # check the poses -> flight path
-splatplan replan data/captures/<name>          # planned paths between real flight points
-splatplan export data/captures/<name> --out web/data/<scene> --flight reports/<name>/flight --crop 8 \
-  --paths reports/<name>/replan
-```
-
-(`splatplan` is `cargo run --release -p splatplan-cli --`.) Filming tips and setting the scale: [data/README.md](data/README.md). Adding the video and running the viewer: [web/README.md](web/README.md). All commands: [apps/splatplan-cli](apps/splatplan-cli).
 
 ## Planned paths
 
@@ -91,6 +61,24 @@ The project started as a drone path planner, and that part still works. `splatpl
 - Rooms full of identical desks can fool feature matching. In the basement, matching every pair of keyframes folded parts of the room onto each other. Dropping long-range matches with under 30 inliers fixed it, but `ingest.sh` doesn't do that step yet.
 - Glass and screens reconstruct poorly.
 - No planned path has been flown. `SAFE` means the path is clear in the reconstructed model, not in the real room. A hole in the splat looks like free space, and the verifier ignores Gaussians below an opacity floor (0.05, recorded in every certificate).
+
+## Your own footage
+
+This needs an Apple Silicon Mac and Rust.
+
+```bash
+scripts/setup_macos.sh                         # ffmpeg, COLMAP, Brush
+scripts/ingest.sh data/captures/<name>         # video -> splat
+# give it a scale: scale.json or annotations.json, see data/README.md
+splatplan clean  data/captures/<name>          # remove floaters
+scripts/register_all.sh data/captures/<name>   # place every video frame (~10-15 min)
+splatplan flight data/captures/<name>          # check the poses -> flight path
+splatplan replan data/captures/<name>          # planned paths between real flight points
+splatplan export data/captures/<name> --out web/data/<scene> --flight reports/<name>/flight --crop 8 \
+  --paths reports/<name>/replan
+```
+
+(`splatplan` is `cargo run --release -p splatplan-cli --`.) Filming tips and setting the scale: [data/README.md](data/README.md). Adding the video and running the viewer: [web/README.md](web/README.md). All commands: [apps/splatplan-cli](apps/splatplan-cli).
 
 ## License
 

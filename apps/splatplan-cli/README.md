@@ -12,7 +12,7 @@
 | `render` / `psnr` | Flythrough frames; renderer check against the photos. |
 | `synth` | Writes a synthetic capture (car, car-pocket, field). |
 
-Planning (optional):
+Planning:
 
 | Command | What it does |
 | --- | --- |

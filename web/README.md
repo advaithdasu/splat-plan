@@ -1,6 +1,6 @@
 # Web viewer
 
-A static page that shows each splat with the drone's recovered flight path and its video. Planned paths are an optional layer. Uses [three.js](https://threejs.org) and [Spark](https://sparkjs.dev) from jsDelivr, so there's no build step.
+A static page that shows each splat with the drone's recovered flight path and its video. It can also draw planned paths as a layer. Uses [three.js](https://threejs.org) and [Spark](https://sparkjs.dev) from jsDelivr, so there's no build step.
 
 ## Make the data
 
@@ -36,4 +36,4 @@ Each scene in `web/data/<scene>/`:
 npx serve web
 ```
 
-Use a server that supports HTTP range requests, or video seeking won't work (`python3 -m http.server` doesn't). To publish, copy `web/` with its data to any static host. It needs WebGL 2.
+Use a server that supports HTTP range requests, or video seeking won't work (`python3 -m http.server` doesn't). To publish, copy `web/` with its data to any static host, or run `scripts/deploy_demo.sh` to deploy it to Vercel (needs the `vercel` CLI). It needs WebGL 2.
