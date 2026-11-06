@@ -1,0 +1,6 @@
+# Pinned so CI and the developer's Mac agree on clippy/rustfmt behavior.
+# (Homebrew's cargo ignores this file; rustup-managed toolchains honor it.)
+[toolchain]
+channel = "1.87.0"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

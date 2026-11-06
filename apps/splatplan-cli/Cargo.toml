@@ -1,0 +1,39 @@
+[package]
+name = "splatplan-cli"
+description = "Command-line front end for the SplatPlan pipeline."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "splatplan"
+path = "src/main.rs"
+
+[dependencies]
+splat-types.workspace = true
+gs-io.workspace = true
+colmap-io.workspace = true
+gs-align.workspace = true
+gs-map.workspace = true
+gs-verify.workspace = true
+gs-render-cpu.workspace = true
+planner.workspace = true
+synth.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+image.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+rayon.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

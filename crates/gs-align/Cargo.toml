@@ -1,0 +1,23 @@
+[package]
+name = "gs-align"
+description = "Ground-plane fit, gravity alignment and metric scale recovery for splat scenes."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+splat-types.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+synth.workspace = true
+proptest.workspace = true
+
+[lints]
+workspace = true

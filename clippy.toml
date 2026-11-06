@@ -1,0 +1,4 @@
+# Tests may unwrap: a panic there is a test failure, which is what we want.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true

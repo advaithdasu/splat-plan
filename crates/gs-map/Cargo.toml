@@ -1,0 +1,30 @@
+[package]
+name = "gs-map"
+description = "Collision map: density grid, observed-free ray casting and Euclidean distance field."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+splat-types.workspace = true
+rayon.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+synth.workspace = true
+proptest.workspace = true
+criterion.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+rayon.workspace = true
+
+[[bench]]
+name = "map"
+harness = false
+
+[lints]
+workspace = true

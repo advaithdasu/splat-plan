@@ -1,0 +1,18 @@
+[package]
+name = "colmap-io"
+description = "Parser and writer for the COLMAP text model (cameras.txt, images.txt, points3D.txt)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+splat-types.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,145 @@
+:root {
+  /* Matches dasu.dev: near-black page, slightly lighter cards, hairline borders, white accent. */
+  --bg: #0a0a0a;
+  --card: #111111;
+  --raised: #171717;
+  --text: #ededed;
+  --muted: #8f8f8f;
+  --accent: #ffffff;
+  --line: #242424;
+  --line-hover: #3a3a3a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One column for everything: title, tabs, viewer + panel, write-up share the same left and right edges. */
+header, main { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+header { text-align: center; position: relative; }
+#repo { position: absolute; top: 30px; right: 20px; color: var(--muted); line-height: 0; transition: color 0.15s; }
+#repo:hover { color: #fff; }
+#repo svg { width: 32px; height: 32px; }
+header h1 { margin: 32px 0 6px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+header p { margin: 0 auto 20px; max-width: 62ch; color: var(--muted); }
+
+main { padding-bottom: 60px; }
+
+#tabs { margin: 0 0 12px; display: flex; gap: 8px; }
+#tabs button, .buttons button {
+  background: var(--card); color: var(--muted); border: 1px solid var(--line);
+  border-radius: 6px; padding: 6px 13px; font: inherit; font-size: 14px; cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+#tabs button:hover, .buttons button:hover:not(:disabled) { border-color: var(--line-hover); color: #fff; }
+#tabs button.active { border-color: #fff; color: #fff; }
+.buttons button:disabled { opacity: 0.4; cursor: default; }
+.buttons { display: flex; gap: 8px; margin: 10px 0; }
+
+#stage {
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px;
+  height: min(72vh, 760px); margin: 0 0 30px;
+}
+#view { position: relative; min-width: 0; border-radius: 10px; overflow: hidden; background: #000; border: 1px solid var(--line); }
+#viewer, #viewer canvas { width: 100%; height: 100%; display: block; }
+
+#loading, #hint {
+  position: absolute; left: 12px; color: var(--muted); font-size: 13px;
+  background: rgba(0, 0, 0, 0.5); padding: 3px 8px; border-radius: 4px; pointer-events: none;
+}
+#loading { top: 12px; }
+#hint { bottom: 12px; left: auto; right: 12px; }
+
+#panel {
+  min-height: 0; overflow: auto; background: var(--card); border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px 16px;
+}
+#panel h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: #fff; margin: 0 0 6px; }
+#panel h3, #layers legend {
+  font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+}
+#panel h3 { margin: 14px 0 4px; }
+.small, #scene-facts { font-size: 12.5px; color: var(--muted); margin: 4px 0; }
+
+#path-list { margin: 6px 0; padding-left: 0; list-style: none; max-height: 140px; overflow: auto; }
+#path-list li {
+  display: flex; align-items: center; gap: 8px; padding: 3px 6px; border-radius: 4px;
+  cursor: pointer; font-size: 13px;
+}
+#path-list li:hover { background: var(--raised); }
+#path-list li.selected { background: var(--raised); outline: 1px solid #fff; }
+.swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+#path-detail { font-size: 12.5px; color: var(--muted); min-height: 3.2em; }
+#path-detail b { color: var(--text); font-weight: 600; }
+
+#flight-section { border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 6px; }
+#layers { border: 0; margin: 4px 0 0; padding: 0; }
+#layers legend { padding: 0; margin: 12px 0 6px; }
+#layers input { accent-color: #fff; }
+#layers label { display: block; font-size: 13px; margin: 3px 0; cursor: pointer; }
+#layers label:has(input:disabled) { color: var(--muted); cursor: default; }
+#path-section { border-top: 1px solid var(--line); margin-top: 6px; }
+#fslider { flex: 1; min-width: 0; accent-color: #fff; }
+.transport, .camrow { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; }
+.camrow { margin-top: 8px; }
+
+/* Fixed-size icon buttons: the glyph changes, the button never does. */
+.icon-btn {
+  flex: none; width: 36px; height: 36px; padding: 0; display: grid; place-items: center;
+  background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
+}
+.icon-btn:hover:not(:disabled) { border-color: var(--line-hover); color: #fff; }
+.icon-btn:disabled { opacity: 0.4; cursor: default; }
+.icon-btn svg { width: 18px; height: 18px; fill: currentColor; stroke: currentColor; stroke-width: 0; }
+#foverview svg, #camseg svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#fplay .i-pause, #fly .i-stop { display: none; }
+#fplay.on .i-play, #fly.on .i-play { display: none; }
+#fplay.on .i-pause, #fly.on .i-stop { display: inline; }
+#fplay { background: #fff; border-color: #fff; color: #0a0a0a; }
+#fplay:hover:not(:disabled) { background: #d8d8d8; border-color: #d8d8d8; color: #0a0a0a; }
+
+/* Free / Drone switch: both options always visible, the active one lit. */
+.seg { flex: 1; display: flex; padding: 3px; gap: 2px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+.seg button {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 5px 0; font: inherit; font-size: 13px; color: var(--muted);
+  background: transparent; border: 0; border-radius: 6px; cursor: pointer;
+}
+.seg button svg { width: 15px; height: 15px; }
+.seg button[aria-pressed="true"] { background: var(--raised); color: #fff; box-shadow: inset 0 0 0 1px #fff; }
+.seg button:not([aria-pressed="true"]):hover { color: var(--text); }
+
+/* What the canvas is showing right now. */
+#viewbadge {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%); display: none; align-items: center; gap: 7px;
+  font-size: 12.5px; color: #fff; background: rgba(0, 0, 0, 0.6); padding: 4px 11px; border-radius: 999px; pointer-events: none;
+}
+#viewbadge .dot { width: 8px; height: 8px; border-radius: 50%; background: #7dff6a; }
+#viewbadge.drone .dot { background: #fff; }
+#ftime { min-height: 1.4em; }
+.legend { display: inline-block; width: 46px; height: 8px; border-radius: 2px; vertical-align: middle;
+  background: linear-gradient(90deg, #3cc8ff, #7dff6a, #ffd23c, #ff5a3c); }
+#fvideo-box {
+  position: absolute; left: 12px; bottom: 12px; width: min(34%, 360px); margin: 0;
+  border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #000; display: none;
+}
+#fvideo { width: 100%; display: block; }
+#fvideo-box figcaption {
+  position: absolute; top: 4px; left: 6px; font-size: 11.5px; color: #fff;
+  background: rgba(0, 0, 0, 0.55); padding: 1px 6px; border-radius: 3px;
+}
+
+
+@media (max-width: 900px) {
+  #stage { grid-template-columns: 1fr; height: auto; }
+  #view { height: 62vh; }
+  #panel { overflow: visible; }
+  #hint { display: none; }
+  #fvideo-box { width: 45%; bottom: 12px; }
+}

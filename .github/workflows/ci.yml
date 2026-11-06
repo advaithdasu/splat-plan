@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  rust:
+    name: rust (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        # ubuntu-latest = x86_64 Linux; macos-latest = Apple Silicon (arm64).
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm macOS runner is Apple Silicon
+        if: runner.os == 'macOS'
+        run: test "$(uname -m)" = "arm64"
+      - name: Install pinned toolchain (rust-toolchain.toml)
+        run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: test (debug)
+        run: cargo test --workspace
+      - name: test (release, includes perf budgets)
+        run: cargo test --workspace --release
+      - name: benches compile
+        run: cargo bench --workspace --no-run
+      - name: Verifier independence check (gs-verify must not depend on planner/gs-map)
+        run: cargo test -p gs-verify --test independence
+
+  shell:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck scripts
+        run: |
+          if compgen -G "scripts/*.sh" > /dev/null; then shellcheck scripts/*.sh; else echo "no scripts yet"; fi

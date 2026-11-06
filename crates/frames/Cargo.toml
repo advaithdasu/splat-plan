@@ -1,0 +1,27 @@
+[package]
+name = "frames"
+description = "Blur scoring and keyframe selection for drone video frames."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "frames"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+image.workspace = true
+rayon.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+rand.workspace = true
+rand_chacha.workspace = true
+
+[lints]
+workspace = true

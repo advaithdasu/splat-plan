@@ -1,0 +1,31 @@
+[package]
+name = "gs-verify"
+description = "Independent trajectory verifier that checks clearance against the raw Gaussians."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Independence: within this workspace, gs-verify may depend ONLY on
+# splat-types. tests/independence.rs enforces this in CI.
+[dependencies]
+splat-types.workspace = true
+rayon.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+synth.workspace = true
+proptest.workspace = true
+rand.workspace = true
+rand_chacha.workspace = true
+criterion.workspace = true
+
+[lints]
+workspace = true
+
+[[bench]]
+name = "certify"
+harness = false

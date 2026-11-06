@@ -1,0 +1,73 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/splat-types",
+    "crates/gs-io",
+    "crates/colmap-io",
+    "crates/gs-align",
+    "crates/gs-map",
+    "crates/gs-verify",
+    "crates/planner",
+    "crates/gs-render-cpu",
+    "crates/frames",
+    "crates/synth",
+    "apps/splatplan-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.87"
+license = "MIT"
+repository = "https://github.com/advaithdasu/splat-plan"
+publish = false
+
+# Every dependency is declared once here so versions stay consistent across
+# crates. Cargo.lock (committed) pins the exact resolved versions.
+[workspace.dependencies]
+splat-types = { path = "crates/splat-types" }
+gs-io = { path = "crates/gs-io" }
+colmap-io = { path = "crates/colmap-io" }
+gs-align = { path = "crates/gs-align" }
+gs-map = { path = "crates/gs-map" }
+gs-verify = { path = "crates/gs-verify" }
+planner = { path = "crates/planner" }
+gs-render-cpu = { path = "crates/gs-render-cpu" }
+frames = { path = "crates/frames" }
+synth = { path = "crates/synth" }
+
+nalgebra = { version = "0.33", features = ["serde-serialize"] }
+rayon = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "env-filter", "ansi"] }
+clap = { version = "4.5", features = ["derive"] }
+rand = "0.8"
+rand_chacha = "0.3"
+proptest = "1.5"
+criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+# Library code must return errors instead of panicking on bad input.
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+
+[profile.release]
+debug = 1
+
+# Tests run in debug by default; geometry-heavy tests are much faster with
+# some optimization, while keeping debug assertions on.
+[profile.test]
+opt-level = 2
+
+[profile.dev.package."*"]
+opt-level = 2
